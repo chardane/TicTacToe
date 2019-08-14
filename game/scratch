@@ -1,0 +1,101 @@
+func (b *Board) findWinner(inputPiece string, row int, col int, numMatches int) *string {
+visited := []int{row, col}
+visitedNeighbors := make([][]int, 0)
+visitedNeighbors = append(visitedNeighbors, visited)
+fmt.Printf("******* begin! inputpiece: %s numMatches: %v \n", inputPiece, numMatches)
+return b.findMatches(inputPiece, row, col, numMatches, visitedNeighbors)
+}
+
+func (b *Board) findMatches(inputPiece string, row int, col int, numMatches int, visitedNeighbors [][]int) *string {
+neighbors := b.generateNeighborsForMove(row, col)
+
+for _, coordinates := range neighbors {
+neighborRow := coordinates[0]
+neighborCol := coordinates[1]
+neighborPiece := b.Rows[neighborRow][neighborCol]
+if neighborPiece != Empty {
+fmt.Printf("******* %v inputpiece: %s neighborPiece: %s \n", coordinates, inputPiece, neighborPiece)
+}
+
+if !coordinatesInList(coordinates, visitedNeighbors) && neighborPiece == inputPiece {
+numMatches++ // found a match, find more
+fmt.Printf("******* numMatches: %v \n", numMatches)
+if numMatches == b.size-1 {
+fmt.Println("returning!", inputPiece)
+return &inputPiece
+}
+visitedNeighbors = append(visitedNeighbors, coordinates)
+fmt.Printf("******* visitedNeighbors: %v \n", visitedNeighbors)
+
+return b.findMatches(inputPiece, neighborRow, neighborCol, numMatches, visitedNeighbors)
+}
+
+}
+return nil
+}
+
+func coordinatesInList(query []int, list [][]int) bool {
+// not a very robust search, but this will do for now
+for _, v := range list {
+if query[0] == v[0] && query[1] == v[1] {
+return true
+}
+}
+return false
+}
+
+func (b *Board) generateNeighborsForMove(row int, col int) [][]int {
+//TODO: DRY this out
+neighborCoordinates := make([][]int, 0)
+// left and right
+left := col-1
+if left >= 0 {
+newNeighbor := []int{row, left}
+neighborCoordinates = append(neighborCoordinates, newNeighbor)
+}
+
+right := col+1
+if right < b.size {
+newNeighbor := []int{row, right}
+neighborCoordinates = append(neighborCoordinates, newNeighbor)
+}
+
+// up and down
+up := row-1
+if up >= 0 {
+newNeighbor := []int{up, col}
+neighborCoordinates = append(neighborCoordinates, newNeighbor)
+}
+
+down := row+1
+if down < b.height {
+newNeighbor := []int{down, col}
+neighborCoordinates = append(neighborCoordinates, newNeighbor)
+}
+
+// upper left, upper right
+if up >= 0  {
+if left >= 0 {
+newNeighbor := []int{up, left}
+neighborCoordinates = append(neighborCoordinates, newNeighbor)
+}
+if right < b.size {
+newNeighbor := []int{up, right}
+neighborCoordinates = append(neighborCoordinates, newNeighbor)
+}
+}
+
+// lower left, lower right
+if down < b.height  {
+if left >= 0 {
+newNeighbor := []int{down, left}
+neighborCoordinates = append(neighborCoordinates, newNeighbor)
+}
+if right < b.size {
+newNeighbor := []int{down, right}
+neighborCoordinates = append(neighborCoordinates, newNeighbor)
+}
+}
+
+return neighborCoordinates
+}
