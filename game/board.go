@@ -70,17 +70,20 @@ func (b *Board) PlaceMoveAndCheckWin(playerX bool, row int, col int, turnCount i
 	if err != nil {
 		return err
 	}
+
 	winner := b.findWinner(piece, row, col)
 	if winner != nil {
 		b.setWinner(*winner)
 		return nil
 	}
+
 	// if no winner, check if board is full
 	if b.isBoardFull(turnCount) {
 		draw := PlayersTie
 		b.Winner = &draw
 		return nil
 	}
+
 	// if no winner and board is not full
 	return nil
 }
@@ -102,7 +105,6 @@ func (b *Board) CongratulateWinner() {
 
 func (b *Board) findWinner(inputPiece string, row int, col int) *string {
 	// check rows
-	//winner := b.checkRowsForWins()
 	rowFirstPieceFinder := func(boardRows [][]string, outerIndex int, innerIndex int) string {
 		return boardRows[outerIndex][0]
 	}
@@ -144,8 +146,6 @@ func (b *Board) findWinner(inputPiece string, row int, col int) *string {
 	if winner != nil {
 		return winner
 	}
-
-
 
 	return nil
 }
