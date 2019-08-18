@@ -44,7 +44,7 @@ func collectInput(playerX bool) string {
 		promptString = "Player X: "
 	}
 
-  buf := bufio.NewReader(os.Stdin)
+	buf := bufio.NewReader(os.Stdin)
 	fmt.Print("\n", promptString)
 
 	sentence, err = buf.ReadBytes('\n')
@@ -54,12 +54,10 @@ func collectInput(playerX bool) string {
 	return string(sentence)
 }
 
-func printGameWelcomeBanner(){
+func printGameWelcomeBanner() {
 	fmt.Println("*************************")
 	fmt.Println("*                       *")
 	fmt.Println("* Let's play TicTacToe! *")
 	fmt.Println("*                       *")
 	fmt.Println("*************************")
 }
-
-
